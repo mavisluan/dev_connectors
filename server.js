@@ -7,6 +7,10 @@ const app = express();
 // connect to the database
 connectDB();
 
+// Middleware parse the request body
+// takes incoming request json string body and convert it into an object
+// (express.json === app.use(bodyParser.json())
+app.use(express.json({ extended: false }));
 app.get('/', (req, res) => res.send('API running'));
 
 // Define Routes
