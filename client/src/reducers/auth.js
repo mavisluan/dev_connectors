@@ -38,7 +38,6 @@ export const auth = (state = initialState, action) => {
                 isAuthenticated: true,
                 loading: false,
             };
-
         case LOGOUT:
         case LOGIN_FAIL:
         case AUTH_ERROR:
@@ -50,6 +49,7 @@ export const auth = (state = initialState, action) => {
                 isAuthenticated: false,
                 loading: false,
             };
+
         default:
             return state;
     }
