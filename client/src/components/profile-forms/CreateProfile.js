@@ -1,9 +1,11 @@
-import React, { useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+/* eslint-disable no-shadow */
+import React, { useState, useEffect, Fragment } from 'react';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
-const CreateProfile = () => {
+const CreateProfile = ({ profile: { profile, loading }, createProfile, getCurrentProfile, history }) => {
     const [formData, setFormData] = useState({
         company: '',
         website: '',
@@ -33,15 +35,28 @@ const CreateProfile = () => {
         youtube,
         instagram,
     } = formData;
+
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-    return (
+
+    const onSubmit = e => {
+        e.preventDefault();
+        createProfile(formData, history);
+    };
+
+    useEffect(() => {
+        getCurrentProfile();
+    }, [getCurrentProfile]);
+
+    return loading && profile === null ? (
+        <Redirect to="/dashboard" />
+    ) : (
         <Fragment>
             <h1 className="large text-primary">Create Your Profile</h1>
             <p className="lead">
                 <i className="fas fa-user" /> Let's get some information to make your profile stand out
             </p>
             <small>* = required field</small>
-            <form className="form">
+            <form className="form" onSubmit={e => onSubmit(e)}>
                 <div className="form-group">
                     <select name="status" value={status} onChange={e => onChange(e)}>
                         <option value="0">* Select Professional Status</option>
@@ -140,7 +155,6 @@ const CreateProfile = () => {
                                 onChange={e => onChange(e)}
                             />
                         </div>
-
                         <div className="form-group social-input">
                             <i className="fab fa-facebook fa-2x" />
                             <input
@@ -151,7 +165,6 @@ const CreateProfile = () => {
                                 onChange={e => onChange(e)}
                             />
                         </div>
-
                         <div className="form-group social-input">
                             <i className="fab fa-youtube fa-2x" />
                             <input
@@ -196,4 +209,17 @@ const CreateProfile = () => {
     );
 };
 
-export default CreateProfile;
+CreateProfile.propTypes = {
+    profile: PropTypes.object.isRequired,
+    createProfile: PropTypes.func.isRequired,
+    getCurrentProfile: PropTypes.func.isRequired,
+    history: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+    profile: state.profile,
+});
+export default connect(
+    mapStateToProps,
+    { createProfile, getCurrentProfile }
+)(withRouter(CreateProfile));
