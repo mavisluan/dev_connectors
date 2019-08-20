@@ -15,7 +15,7 @@ const Dashboard = ({ profile: { profile, loading }, auth: { user }, getCurrentPr
         <Spinner />
     ) : (
         <Fragment>
-            <h1 className="large text-main">Dashboard</h1>
+            <h1 className="large text-primary">Dashboard</h1>
             <p className="lead">
                 <i className="fas fa-user" />
                 Welcome {user && user.name}
