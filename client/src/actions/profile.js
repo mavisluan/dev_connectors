@@ -1,5 +1,13 @@
 import axios from 'axios';
-import { GET_PROFILE, GET_PROFILES, PROFILE_ERROR, UPDATE_PROFILE } from './types';
+import {
+    GET_PROFILE,
+    GET_PROFILES,
+    PROFILE_ERROR,
+    UPDATE_PROFILE,
+    ACCOUNT_DELETED,
+    CLEAR_PROFILE,
+    GET_REPOS,
+} from './types';
 import { setAlert } from './alert';
 
 // Get current user‘s profile
@@ -26,6 +34,40 @@ export const getProfiles = () => async dispatch => {
 
         dispatch({
             type: GET_PROFILES,
+            payload: res.data,
+        });
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status },
+        });
+    }
+};
+
+// Get profile by ID
+export const getProfileById = userId => async dispatch => {
+    try {
+        const res = await axios.get(`/api/profile/user/${userId}`);
+
+        dispatch({
+            type: GET_PROFILE,
+            payload: res.data,
+        });
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status },
+        });
+    }
+};
+
+// Get Github repos
+export const getGithubRepos = username => async dispatch => {
+    try {
+        const res = await axios.get(`/api/profile/github/${username}`);
+
+        dispatch({
+            type: GET_REPOS,
             payload: res.data,
         });
     } catch (err) {
@@ -171,5 +213,24 @@ export const deleteEducation = id => async dispatch => {
             type: PROFILE_ERROR,
             payload: { msg: err.response.statusText, status: err.response.status },
         });
+    }
+};
+
+// Delete account & profile
+export const deleteAccount = () => async dispatch => {
+    if (window.confirm('Are you sure? This can NOT be undone!')) {
+        try {
+            await axios.delete('/api/profile');
+
+            dispatch({ type: CLEAR_PROFILE });
+            dispatch({ type: ACCOUNT_DELETED });
+
+            dispatch(setAlert('Your account has been permanantly deleted'));
+        } catch (err) {
+            dispatch({
+                type: PROFILE_ERROR,
+                payload: { msg: err.response.statusText, status: err.response.status },
+            });
+        }
     }
 };

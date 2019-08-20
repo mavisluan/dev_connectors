@@ -1,15 +1,16 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-shadow */
 import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getCurrentProfile } from '../../actions/profile';
+import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import DashboardActions from './DashboardActions';
 import Experience from './Experience';
 import Education from './Education';
 
-const Dashboard = ({ profile: { profile, loading }, auth: { user }, getCurrentProfile }) => {
+const Dashboard = ({ profile: { profile, loading }, auth: { user }, getCurrentProfile, deleteAccount }) => {
     useEffect(() => {
         getCurrentProfile();
     }, [getCurrentProfile]);
@@ -28,6 +29,12 @@ const Dashboard = ({ profile: { profile, loading }, auth: { user }, getCurrentPr
                     <DashboardActions />
                     <Experience experience={profile.experience} />
                     <Education education={profile.education} />
+
+                    <div className="my-2">
+                        <button className="btn btn-danger" onClick={() => deleteAccount()} type="button">
+                            <i className="fas fa-user-minus" /> Delete My Account
+                        </button>
+                    </div>
                 </Fragment>
             ) : (
                 <Fragment>
@@ -45,6 +52,7 @@ Dashboard.propTypes = {
     profile: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     getCurrentProfile: PropTypes.func.isRequired,
+    deleteAccount: PropTypes.func.isRequired,
     loading: PropTypes.bool,
 };
 
@@ -55,5 +63,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getCurrentProfile }
+    { getCurrentProfile, deleteAccount }
 )(Dashboard);
