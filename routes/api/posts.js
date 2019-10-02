@@ -175,14 +175,17 @@ router.post(
         try {
             // get user instance to access user avatar
             const user = await User.findById(req.user.id).select('-password');
-            const post = await Post.findById(req.params.postId);
-            const { text, name } = req.body;
+            console.log('user', user);
 
+            const post = await Post.findById(req.params.postId);
+            // const { text, name } = req.body;
+            const { text } = req.body;
+            console.log('requesttext', text);
             const comment = {
                 user: req.user.id,
                 avatar: user.avatar,
                 text,
-                name,
+                name: user.name,
             };
 
             post.comments.unshift(comment);

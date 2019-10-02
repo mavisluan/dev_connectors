@@ -184,7 +184,6 @@ router.put(
         }
 
         const { title, company, location, from, to, current, description } = req.body;
-
         const newExp = {
             title,
             company,
