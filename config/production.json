@@ -1,0 +1,6 @@
+{
+  "mongoURI": "mongodb+srv://mavisluan:mavisluan@devconnector-nityf.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken",
+  "githubClientId": "f9115e4c41ac3b7942a0",
+  "githubSecret": "cdcb2e114f1197fcb847c7e32d4332ca306cfd89"
+}
