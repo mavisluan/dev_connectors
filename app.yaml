@@ -1,0 +1,2 @@
+service: dev-connector-api
+runtime: nodejs10
